@@ -1,0 +1,20 @@
+{
+    "name": "13sai/grpc-php-client",
+    "description": "grpc php client",
+    "authors": [
+        {
+            "name": "13sai",
+            "email": "sai0556@qq.com"
+        }
+    ],
+
+    "require": {
+        "grpc/grpc": "^1.25"
+    },
+    "autoload":{
+        "psr-4":{
+          "GPBMetadata\\":"GPBMetadata/",
+          "Hello\\":"Hello/"
+        }
+    }
+}
