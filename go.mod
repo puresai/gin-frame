@@ -1,9 +1,8 @@
-module game
+module github.com/13sai/gin-frame
 
 go 1.12
 
 require (
-	github.com/13sai/gin-frame v1.0.0
 	github.com/fsnotify/fsnotify v1.4.7
 	github.com/gin-gonic/gin v1.5.0
 	github.com/go-redis/redis v6.15.6+incompatible
@@ -15,5 +14,3 @@ require (
 	github.com/valyala/fasthttp v1.6.0
 	google.golang.org/grpc v1.21.0
 )
-
-replace github.com/13sai/gin-frame v1.0.0 => /Users/wangzetao/Work/golang/game

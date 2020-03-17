@@ -1,5 +1,5 @@
 #!/bin/bash
-SERVER="rzc-game"
+SERVER="go-frame"
 BASE_DIR=$PWD
 INTERVAL=8
 LOG_FILE_PATH="/data/logs/$SERVER.log"
