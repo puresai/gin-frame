@@ -38,7 +38,7 @@ func main() {
 	defer db.CloseDB(DB)
 
 	// redis
-	db.InitRedis()
+	db.RedisInit()
 
 	go func() {
 		pingServer()
