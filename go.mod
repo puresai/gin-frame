@@ -1,16 +1,17 @@
 module github.com/13sai/gin-frame
 
-go 1.12
+go 1.13
 
 require (
-	github.com/fsnotify/fsnotify v1.4.7
-	github.com/gin-gonic/gin v1.5.0
-	github.com/go-redis/redis v6.15.6+incompatible
-	github.com/golang/protobuf v1.3.2
-	github.com/jinzhu/gorm v1.9.11
-	github.com/mitchellh/mapstructure v1.1.2
-	github.com/spf13/pflag v1.0.5
-	github.com/spf13/viper v1.6.1
-	github.com/valyala/fasthttp v1.6.0
-	google.golang.org/grpc v1.21.0
+	github.com/fsnotify/fsnotify v1.4.9
+	github.com/gin-gonic/gin v1.6.3
+	github.com/go-redis/redis v6.15.9+incompatible
+	github.com/go-redis/redis/v8 v8.4.0
+	github.com/jinzhu/gorm v1.9.16
+	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible
+	github.com/lestrrat-go/strftime v1.0.3 // indirect
+	github.com/spf13/cast v1.3.0
+	github.com/spf13/pflag v1.0.3
+	github.com/spf13/viper v1.7.1
+	go.uber.org/zap v1.10.0
 )

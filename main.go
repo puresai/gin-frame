@@ -1,74 +1,89 @@
 package main
 
 import (
-	"log"
-	"net/http"
-	"os"
-	"time"
 	"fmt"
-	"errors"
+	"time"
+	"strconv"
+	"net/http"
 
-	"github.com/gin-gonic/gin"
-	"github.com/spf13/pflag"
-	"github.com/spf13/viper"
+    "github.com/spf13/pflag"
+    "github.com/spf13/viper"
+    "github.com/gin-gonic/gin"
 
-	"github.com/13sai/gin-frame/models"
-	"github.com/13sai/gin-frame/config"
-	"github.com/13sai/gin-frame/router"
-	"github.com/13sai/gin-frame/graceful"
-	"github.com/13sai/gin-frame/services"
+    "github.com/13sai/gin-frame/config"
+    "github.com/13sai/gin-frame/db"
+    "github.com/13sai/gin-frame/router"
+    "github.com/13sai/gin-frame/logger"
+    "github.com/13sai/gin-frame/graceful"
 )
 
 var (
-	cfg = pflag.StringP("config", "c", "", "config file path.")
+    conf = pflag.StringP("config", "c", "", "config filepath")
 )
 
 func main() {
-	pflag.Parse()
-	// 初始化配置
-	if err := config.Init(*cfg); err != nil {
-		panic(err)
+    pflag.Parse()
+
+    // 初始化配置
+    if err := config.Run(*conf); err != nil {
+        panic(err)
 	}
 
+	logger.Info("i'm log123-----Info")
+	logger.Error("i'm log123-----Error")
+
+	
 	// 连接mysql数据库
-	issucc := models.GetInstance().InitDataPool()
-    if !issucc {
-		log.Println("init database pool failure...")
-		panic(errors.New("init database pool failure"))
-        os.Exit(1)
-	}
+	DB := db.GetDB()
+	defer db.CloseDB(DB)
 
-	// 连接redis
-	services.RedisInit()
+	// redis
+	db.InitRedis()
 
-	gin.SetMode(viper.GetString("runmode"))
+	go func() {
+		pingServer()
+	}()
 
+	gin.SetMode(viper.GetString("mode"))
 	g := gin.New()
 	g = router.Load(g)
 
-	go func() {
-		if err := pingServer(); err != nil {
-			fmt.Println("fail:健康检测失败", err)
-		}
-		fmt.Println("success:健康检测成功")
-	}()
+	// g.Run(viper.GetString("addr"))
 
-	fmt.Printf("启动http服务端口%s", viper.GetString("addr"))
-	fmt.Println()
 
+	// logger.Info("启动http服务端口%s\n", viper.GetString("addr"))
+
+	// time.Sleep(2*time.Second)
 	if err := graceful.ListenAndServe(viper.GetString("addr"), g); err != nil && err != http.ErrServerClosed {
-		fmt.Printf("fail:http服务启动失败: %s\n", err)
+		logger.Error("fail:http服务启动失败: %s\n", err)
 	}
 }
 
 // 健康检查
-func pingServer() error {
+// func pingServer() error {
+// 	for i := 0; i < viper.GetInt("max_ping_count"); i++ {
+// 		url := fmt.Sprintf("%s%s%s", "http://127.0.0.1", viper.GetString("addr"), viper.GetString("healthCheck"))
+// 		fmt.Println(url)
+// 		resp, err := http.Get(url)
+// 		if err == nil && resp.StatusCode == 200 {
+// 			return nil
+// 		}
+// 		time.Sleep(time.Second)
+// 	}
+// 	return errors.New("健康检测404")
+// }
+
+// 健康检查
+func pingServer() {
 	for i := 0; i < viper.GetInt("max_ping_count"); i++ {
-		resp, err := http.Get(viper.GetString("url") + "/health")
+		url := fmt.Sprintf("%s%s%s", "http://127.0.0.1", viper.GetString("addr"), viper.GetString("healthCheck"))
+		resp, err := http.Get(url)
 		if err == nil && resp.StatusCode == 200 {
-			return nil
+			fmt.Println("health check success!")
+			return
 		}
+		fmt.Println("check fail -" + strconv.Itoa(i+1)+"times")
 		time.Sleep(time.Second)
 	}
-	return errors.New("Cannot connect to the router.")
+	fmt.Println("Cannot connect to the router!!!")
 }
