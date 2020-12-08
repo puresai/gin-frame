@@ -18,9 +18,9 @@ func RedisInit() {
 		Password: viper.GetString("redis.auth"),
 		DB:       viper.GetInt("redis.db"),
 		PoolSize: viper.GetInt("redis.MaxActive"),DialTimeout:  10 * time.Second,
-		ReadTimeout:  30 * time.Second,
-		WriteTimeout: 30 * time.Second,
-		PoolTimeout:  30 * time.Second,
+		ReadTimeout:  10 * time.Second,
+		WriteTimeout: 10 * time.Second,
+		PoolTimeout:  10 * time.Second,
 	})
 
 	pong, err := RedisClient.Ping(Ctx).Result()
