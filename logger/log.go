@@ -5,18 +5,18 @@ import (
 	"log"
 	"time"
 
-	"github.com/lestrrat-go/file-rotatelogs"
+	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
+	"github.com/spf13/viper"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
-    "github.com/spf13/viper"
 )
 
-var Logger *zap.Logger 
+var Logger *zap.Logger
 var LogLevel string
 var FileFormat string
 
 // 初始化日志 logger
-func init() {
+func Start() {
 	// 设置一些基本日志格式
 	config := zapcore.EncoderConfig{
 		MessageKey:  "msg",
@@ -50,24 +50,23 @@ func init() {
 
 	logLevel := zap.DebugLevel
 	switch LogLevel {
-		case "debug":
-			logLevel = zap.DebugLevel
-		case "info":
-			logLevel = zap.InfoLevel
-		case "error":
-			logLevel = zap.ErrorLevel
-		default:
-			logLevel = zap.InfoLevel
+	case "debug":
+		logLevel = zap.DebugLevel
+	case "info":
+		logLevel = zap.InfoLevel
+	case "error":
+		logLevel = zap.ErrorLevel
+	default:
+		logLevel = zap.InfoLevel
 	}
 
 	switch saveType {
-		case "level":
-			Logger = getLevelLogger(encoder, logLevel, FileFormat)
-		default:
-			Logger = getOneLogger(encoder, logLevel, FileFormat)
+	case "level":
+		Logger = getLevelLogger(encoder, logLevel, FileFormat)
+	default:
+		Logger = getOneLogger(encoder, logLevel, FileFormat)
 	}
 
-	
 }
 
 func getLevelLogger(encoder zapcore.Encoder, logLevel zapcore.Level, fileFormat string) *zap.Logger {

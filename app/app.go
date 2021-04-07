@@ -2,37 +2,36 @@ package main
 
 import (
 	"fmt"
-	"time"
-	"strconv"
 	"net/http"
+	"strconv"
+	"time"
 
-    "github.com/spf13/pflag"
-    "github.com/spf13/viper"
-    "github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin"
+	"github.com/spf13/pflag"
+	"github.com/spf13/viper"
 
-    "github.com/13sai/gin-frame/config"
-    "github.com/13sai/gin-frame/db"
-    "github.com/13sai/gin-frame/router"
-    "github.com/13sai/gin-frame/logger"
-    "github.com/13sai/gin-frame/graceful"
+	"github.com/13sai/gin-frame/config"
+	"github.com/13sai/gin-frame/db"
+	"github.com/13sai/gin-frame/graceful"
+	"github.com/13sai/gin-frame/logger"
+	"github.com/13sai/gin-frame/router"
 )
 
 var (
-    conf = pflag.StringP("config", "c", "", "config filepath")
+	conf = pflag.StringP("config", "c", "", "config filepath")
 )
 
 func main() {
-    pflag.Parse()
+	pflag.Parse()
 
-    // 初始化配置
-    if err := config.Run(*conf); err != nil {
-        panic(err)
+	// 初始化配置
+	if err := config.Run(*conf); err != nil {
+		panic(err)
 	}
-
+	logger.Start()
 	logger.Info("i'm log123-----Info")
 	logger.Error("i'm log123-----Error")
 
-	
 	// 连接mysql数据库
 	DB := db.GetDB()
 	defer db.CloseDB(DB)
@@ -49,7 +48,6 @@ func main() {
 	g = router.Load(g)
 
 	// g.Run(viper.GetString("addr"))
-
 
 	// logger.Info("启动http服务端口%s\n", viper.GetString("addr"))
 
@@ -68,7 +66,7 @@ func pingServer() {
 			fmt.Println("health check success!")
 			return
 		}
-		fmt.Println("check fail -" + strconv.Itoa(i+1)+"times")
+		fmt.Println("check fail -" + strconv.Itoa(i+1) + "times")
 		time.Sleep(time.Second)
 	}
 	fmt.Println("Cannot connect to the router!!!")
