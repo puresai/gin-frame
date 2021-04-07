@@ -28,9 +28,11 @@ func main() {
 	if err := config.Run(*conf); err != nil {
 		panic(err)
 	}
+
+	// 启动日志
 	logger.Start()
-	logger.Info("i'm log123-----Info")
-	logger.Error("i'm log123-----Error")
+	// logger.Info("i'm log123-----Info")
+	// logger.Error("i'm log123-----Error")
 
 	// 连接mysql数据库
 	DB := db.GetDB()
@@ -47,11 +49,11 @@ func main() {
 	g := gin.New()
 	g = router.Load(g)
 
+	// graceful 不支持windows，可使用g.Run
 	// g.Run(viper.GetString("addr"))
 
 	// logger.Info("启动http服务端口%s\n", viper.GetString("addr"))
 
-	// time.Sleep(2*time.Second)
 	if err := graceful.ListenAndServe(viper.GetString("addr"), g); err != nil && err != http.ErrServerClosed {
 		logger.Error("fail:http服务启动失败: %s\n", err)
 	}
