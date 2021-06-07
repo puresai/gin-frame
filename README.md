@@ -1,6 +1,6 @@
 ## 说明
 
-gin的基础框架
+gin的基础骨架封装，结合了mysql、redis的连接池，日志，配置读取，平滑重启等。
 
 
 ## 部署与管理
@@ -13,7 +13,7 @@ go get github.com/13sai/gin-frame
 
 配置参考：
 ```
-name: demo2-gin-frame
+name: demo
 db:
   name: blog
   host: 127.0.0.1:3306
@@ -37,4 +37,6 @@ log:
   file_type: one #one, level
 ```
 
-main.go可参照app/app.go
+main.go可参照cmd/demo/main.go
+
+router和controller建议自定义。

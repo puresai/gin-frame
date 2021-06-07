@@ -10,11 +10,11 @@ import (
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 
-	"github.com/13sai/gin-frame/config"
-	"github.com/13sai/gin-frame/db"
-	"github.com/13sai/gin-frame/graceful"
-	"github.com/13sai/gin-frame/logger"
-	"github.com/13sai/gin-frame/router"
+	"github.com/13sai/gin-frame/internal/config"
+	"github.com/13sai/gin-frame/internal/db"
+	"github.com/13sai/gin-frame/internal/logger"
+	"github.com/13sai/gin-frame/internal/pkg/graceful"
+	"github.com/13sai/gin-frame/internal/router"
 )
 
 var (
@@ -52,7 +52,7 @@ func main() {
 	// graceful 不支持windows，可使用g.Run
 	// g.Run(viper.GetString("addr"))
 
-	// logger.Info("启动http服务端口%s\n", viper.GetString("addr"))
+	logger.Info("启动http服务端口%s\n", viper.GetString("addr"))
 
 	if err := graceful.ListenAndServe(viper.GetString("addr"), g); err != nil && err != http.ErrServerClosed {
 		logger.Error("fail:http服务启动失败: %s\n", err)

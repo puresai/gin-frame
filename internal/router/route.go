@@ -5,7 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/13sai/gin-frame/controller"
+	"github.com/13sai/gin-frame/internal/controller"
 )
 
 func Load(g *gin.Engine) *gin.Engine {

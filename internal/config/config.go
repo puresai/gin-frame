@@ -1,10 +1,12 @@
 package config
 
+// 配置初始化
+
 import (
 	"fmt"
 
-    "github.com/fsnotify/fsnotify"
-    "github.com/spf13/viper"
+	"github.com/fsnotify/fsnotify"
+	"github.com/spf13/viper"
 )
 
 type Config struct {
